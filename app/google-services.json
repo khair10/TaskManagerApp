@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "116286057482",
+    "firebase_url": "https://taskmanagerapp-2cae2.firebaseio.com",
+    "project_id": "taskmanagerapp-2cae2",
+    "storage_bucket": "taskmanagerapp-2cae2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:116286057482:android:c7522e8548270523d143f3",
+        "android_client_info": {
+          "package_name": "com.khair.taskmanagerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "116286057482-m9i4mir03grmbiqfvfthslc25ksttiq8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.khair.taskmanagerapp",
+            "certificate_hash": "c43cf5e5f7b6a54097a3f7e67db23cca967028c1"
+          }
+        },
+        {
+          "client_id": "116286057482-o15kb514let1bm96uhcap1df7350h7cs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDtVyC6Xx-kDZfg-QcbPTXTezLJY_kHV4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "116286057482-o15kb514let1bm96uhcap1df7350h7cs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
