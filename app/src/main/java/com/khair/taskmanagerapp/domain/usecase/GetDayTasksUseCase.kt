@@ -1,21 +1,19 @@
 package com.khair.taskmanagerapp.domain.usecase
 
+import com.khair.taskmanagerapp.dayInSec
 import com.khair.taskmanagerapp.domain.model.Task
 import com.khair.taskmanagerapp.domain.repository.TasksRepository
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.schedulers.Schedulers
 
-class GetDayTasksUseCase(val tasksRepository: TasksRepository, val dayStartTimestamp: Long): UseCase<List<Task>>{
+open class GetDayTasksUseCase(val tasksRepository: TasksRepository): GetTasksUseCase{
 
-    val secondsInDay = 86400
-
-    override fun execute(): Flowable<List<Task>> {
+    override fun execute(dayStartTimestamp: Long): Flowable<List<Task>> {
         return tasksRepository.fetchTasks()
             .flatMap { Flowable.fromIterable(it)
-                .filter { it.dateStart >= dayStartTimestamp && it.dateFinish <= dayStartTimestamp + secondsInDay }
+                .filter { it.dateStart >= dayStartTimestamp && it.dateFinish <= dayStartTimestamp + dayInSec }
                 .toList()
                 .toFlowable()
-                .subscribeOn(Schedulers.io())
             }
     }
 }

@@ -7,4 +7,17 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+<!--    <style name="Widget.AppTheme.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">-->
+<!--        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.AppTheme.TextInputLayout</item>-->
+<!--    </style>-->
+
+<!--    -<style name="Widget.AppTHeme.TextInputLayout.OutlinedBox.ExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu" >-->
+<!--        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.AppTheme.TextInputLayout</item>-->
+<!--    </style>-->
+<!--    -->
+<!--    -<style parent="" name="ShapeAppearanceOverlay.AppTheme.TextInputLayout">-->
+<!--        <item name="cornerFamily">rounded</item>-->
+<!--        <item name="cornerSize">8dp</item>-->
+<!--    </style>-->
 </resources>

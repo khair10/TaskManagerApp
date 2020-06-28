@@ -10,14 +10,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.applandeo.materialcalendarview.CalendarView
 import com.applandeo.materialcalendarview.EventDay
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.khair.taskmanagerapp.R
 import com.khair.taskmanagerapp.data.repository.TasksRepositoryImpl
 import com.khair.taskmanagerapp.dayInMillis
 import com.khair.taskmanagerapp.dayInSec
+import com.khair.taskmanagerapp.domain.usecase.GetDayTasksUseCase
 import com.khair.taskmanagerapp.presentation.dto.TaskItemDto
 import com.khair.taskmanagerapp.presentation.mapper.TaskItemMapper
 import com.khair.taskmanagerapp.presentation.ui.calendar.util.TasksAdapter
+import com.khair.taskmanagerapp.presentation.ui.taskcreation.TaskCreationActivity
 import com.khair.taskmanagerapp.presentation.ui.taskdetails.TaskDetailsActivity
+import com.khair.taskmanagerapp.presentation.util.SchedulerProvider
 import java.util.*
 
 class CalendarActivity : AppCompatActivity(), CalendarContract.View {
@@ -25,6 +29,7 @@ class CalendarActivity : AppCompatActivity(), CalendarContract.View {
     private lateinit var cvCalendar: CalendarView
     private lateinit var rvTasks: RecyclerView
     private lateinit var pbLoading: ProgressBar
+    private lateinit var fabCreate: FloatingActionButton
     private lateinit var tasksAdapter: TasksAdapter
     private lateinit var presenter: CalendarContract.Presenter
 
@@ -36,10 +41,12 @@ class CalendarActivity : AppCompatActivity(), CalendarContract.View {
         initListeners()
         val calendar = Calendar.getInstance()
         val time = calendar.timeInMillis - calendar.timeInMillis % (dayInMillis) - calendar.timeZone.rawOffset
+        val repository = TasksRepositoryImpl(this)
         presenter = CalendarPresenter(
             this,
-            TasksRepositoryImpl(this),
-            TaskItemMapper()
+            TaskItemMapper(),
+            SchedulerProvider(),
+            GetDayTasksUseCase(repository)
         )
         presenter.getTasks(time / 1000)
     }
@@ -48,6 +55,7 @@ class CalendarActivity : AppCompatActivity(), CalendarContract.View {
         cvCalendar = findViewById(R.id.cv_calendar)
         rvTasks = findViewById(R.id.rv_tasks)
         pbLoading = findViewById(R.id.pb_loading)
+        fabCreate = findViewById(R.id.fab_create)
         rvTasks.apply {
             isNestedScrollingEnabled = false
             tasksAdapter =
@@ -67,6 +75,7 @@ class CalendarActivity : AppCompatActivity(), CalendarContract.View {
                 presenter.getTasks(timeInSec / 1000 + dayInSec)
             }
         })
+        fabCreate.setOnClickListener { presenter.handleTaskCreateClick() }
     }
 
     override fun showLoading() {
@@ -90,6 +99,10 @@ class CalendarActivity : AppCompatActivity(), CalendarContract.View {
 
     override fun showTaskDetails(id: Long) {
         TaskDetailsActivity.start(this, id)
+    }
+
+    override fun showTaskCreation() {
+        TaskCreationActivity.start(this)
     }
 
     override fun onDestroy() {

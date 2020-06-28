@@ -8,13 +8,18 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:name=".App"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.khair.taskmanagerapp.presentation.ui.taskdetails.TaskDetailsActivity"
+            android:name=".presentation.ui.taskcreation.TaskCreationActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.khair.taskmanagerapp.presentation.ui.calendar.CalendarActivity"
+            android:name=".presentation.ui.taskdetails.TaskDetailsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.ui.calendar.CalendarActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
             <intent-filter>

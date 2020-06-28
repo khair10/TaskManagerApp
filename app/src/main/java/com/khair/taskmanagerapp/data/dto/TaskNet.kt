@@ -1,17 +1,20 @@
 package com.khair.taskmanagerapp.data.dto
 
 import com.google.gson.annotations.SerializedName
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 import java.io.Serializable
 
-data class TaskNet(
+open class TaskNet(
+    @PrimaryKey
     @SerializedName("id")
-    val id: Long?,
+    var id: Long? = null,
     @SerializedName("date_start")
-    val dateStart: String?,
+    var dateStart: String? = null,
     @SerializedName("date_finish")
-    val dateFinish: String?,
+    var dateFinish: String? = null,
     @SerializedName("name")
-    val name: String?,
+    var name: String? = null,
     @SerializedName("description")
-    val description: String?
-) : Serializable
+    var description: String? = null
+) : RealmObject()

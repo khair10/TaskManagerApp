@@ -2,38 +2,38 @@ package com.khair.taskmanagerapp.presentation.ui.taskdetails
 
 import com.khair.taskmanagerapp.domain.mapper.Mapper
 import com.khair.taskmanagerapp.domain.model.Task
-import com.khair.taskmanagerapp.domain.repository.TasksRepository
+import com.khair.taskmanagerapp.domain.usecase.GetDetailsUseCase
 import com.khair.taskmanagerapp.domain.usecase.GetTaskDetailsUseCase
-import com.khair.taskmanagerapp.domain.usecase.UseCase
 import com.khair.taskmanagerapp.presentation.dto.TaskDetailsDto
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import com.khair.taskmanagerapp.presentation.util.BaseSchedulerProvider
+import com.khair.taskmanagerapp.unknownError
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
-import io.reactivex.rxjava3.schedulers.Schedulers
 
 class TaskDetailsPresenter(
     private val view: TaskDetailsContract.View,
-    private val repository: TasksRepository,
-    private val mapper: Mapper<Task, TaskDetailsDto>
+    private val mapper: Mapper<Task, TaskDetailsDto>,
+    private val schedulerProvider: BaseSchedulerProvider,
+    private val useCase: GetDetailsUseCase
 ): TaskDetailsContract.Presenter{
 
     private val destroyDisposable = CompositeDisposable()
 
     override fun getTaskDetails(id: Long) {
-        if (id == -1L) {
+        if (id < 0L) {
             view.showError("Bad 'id'")
             return
         }
-        val useCase = GetTaskDetailsUseCase(repository, id)
-        useCase.execute()
+        useCase
+            .execute(id)
             .map { task -> mapper.map(task) }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.ui())
             .doOnSubscribe { view.showLoading() }
             .doOnTerminate { view.hideLoading() }
             .subscribe (
                 { task -> view.showTaskDetails(task) },
-                { e -> view.showError(e?.message ?: "Undefined exception") }
+                { e -> view.showError(e?.message ?: unknownError) }
             ).disposeWhenDestroy()
     }
 

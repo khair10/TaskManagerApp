@@ -10,8 +10,10 @@ import android.widget.TextView
 import android.widget.Toast
 import com.khair.taskmanagerapp.R
 import com.khair.taskmanagerapp.data.repository.TasksRepositoryImpl
+import com.khair.taskmanagerapp.domain.usecase.GetTaskDetailsUseCase
 import com.khair.taskmanagerapp.presentation.dto.TaskDetailsDto
 import com.khair.taskmanagerapp.presentation.mapper.TaskDetailsMapper
+import com.khair.taskmanagerapp.presentation.util.SchedulerProvider
 
 class TaskDetailsActivity : AppCompatActivity(), TaskDetailsContract.View {
 
@@ -36,10 +38,12 @@ class TaskDetailsActivity : AppCompatActivity(), TaskDetailsContract.View {
         setContentView(R.layout.activity_task_details)
 
         initViews()
+        val repository = TasksRepositoryImpl(this)
         presenter = TaskDetailsPresenter(
             this,
-            TasksRepositoryImpl(this),
-            TaskDetailsMapper()
+            TaskDetailsMapper(),
+            SchedulerProvider(),
+            GetTaskDetailsUseCase(repository)
         )
         presenter.getTaskDetails(intent.getLongExtra(ID_KEY, -1))
     }

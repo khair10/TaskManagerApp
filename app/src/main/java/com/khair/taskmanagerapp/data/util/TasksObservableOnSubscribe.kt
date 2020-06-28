@@ -6,24 +6,27 @@ import com.google.gson.JsonIOException
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
 import com.khair.taskmanagerapp.data.dto.TaskNet
+import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.ObservableEmitter
 import io.reactivex.rxjava3.core.ObservableOnSubscribe
+import io.realm.Realm
+import io.realm.RealmObject
 import java.io.InputStreamReader
 
-class TaskObservableOnSubscribe(val assetFileName: String, val assets: AssetManager) : ObservableOnSubscribe<List<TaskNet>> {
+class TasksObservableOnSubscribe<T: RealmObject>(val mClass: Class<T>) : ObservableOnSubscribe<List<T>> {
 
-    override fun subscribe(emitter: ObservableEmitter<List<TaskNet>>?) {
-        val inputStream = assets.open(assetFileName)
-        val reader = JsonReader(InputStreamReader(inputStream, "UTF-8"))
+    override fun subscribe(emitter: ObservableEmitter<List<T>>?) {
+        var realm: Realm? = null
         try {
-            val gson = Gson()
-            val messages: List<TaskNet> = gson.fromJson(reader, object: TypeToken<List<TaskNet>>(){}.type)
-            emitter?.onNext(messages)
+            realm = Realm.getDefaultInstance()
+            val results = realm.where(mClass).findAll()
+            val tasks = realm.copyFromRealm(results)
+            emitter?.onNext(tasks)
             emitter?.onComplete()
         } catch (e: Exception){
             emitter?.onError(e)
         } finally {
-            reader.close()
+            realm?.close()
         }
     }
 }
